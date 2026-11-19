@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Esportivo | Notícias, Jogos e Tabelas</title>
+    <style>
+        :root {
+            --verde-principal: #06aa48;
+            --verde-escuro: #048738;
+            --cinza-fundo: #f4f4f4;
+            --texto-escuro: #111111;
+            --texto-suave: #555555;
+            --borda: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--cinza-fundo);
+            color: var(--texto-escuro);
+        }
+
+        /* Cabeçalho Principal */
+        header {
+            background-color: var(--verde-principal);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        .top-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-box input {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            width: 220px;
+            font-size: 14px;
+        }
+
+        /* Barra de Times (Escudos) */
+        .teams-bar {
+            background-color: white;
+            border-bottom: 1px solid var(--borda);
+            padding: 10px 20px;
+        }
+
+        .teams-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            overflow-x: auto;
+        }
+
+        .team-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .team-badge:hover {
+            transform: scale(1.1);
+            border-color: var(--verde-principal);
+        }
+
+        /* Container Principal */
+        main {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 20px;
+        }
+
+        /* Grid de Manchetes (Hero) */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .main-card {
+            background: linear-gradient(to top, rgba(0,0,0,0.88) 15%, rgba(0,0,0,0.15) 100%), 
+                        url('https://unsplash.com') center/cover;
+            border-radius: 8px;
+            min-height: 400px;
+            padding: 28px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .main-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .tag {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .main-card .tag {
+            color: #4ade80;
+        }
+
+        .main-card h1 {
+            font-size: 28px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .main-card p {
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .side-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sub-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+
+        .sub-card img {
+            width: 140px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .sub-card .tag {
+            color: var(--verde-principal);
+        }
+
+        .sub-card h2 {
+            font-size: 18px;
+            line-height: 1.3;
+            color: var(--texto-escuro);
+        }
+
+        /* Layout Inferior: Feed + Tabela */
+        .content-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 28px;
+        }
+
+        /* Feed de Notícias */
+        .news-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .news-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            gap: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .news-item:hover {
+            background-color: #fafafa;
+        }
+
+        .news-item img {
+            width: 210px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .news-info .tag {
+            color: var(--verde-principal);
+        }
+
+        .news-info h3 {
+            font-size: 19px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .news-info p {
+            font-size: 14px;
+            color: var(--texto-suave);
+            margin-bottom: 10px;
+        }
+
+        .news-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Widget de Tabela */
+        .widget-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--verde-principal);
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .widget-header h3 {
+            font-size: 17px;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            color: #777;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        td {
+            padding: 10px 4px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .pos-g4 {
+            color: var(--verde-principal);
+            font-weight: bold;
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .hero-grid, .content-columns {
+                grid-template-columns: 1fr;
+            }
+            .news-item {
+                flex-direction: column;
+            }
+            .news-item img {
+                width: 100%;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <div class="logo-area">
+                <button class="menu-btn">☰ MENU</button>
+                <div class="logo">esporte.br</div>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar time ou notícia..." onkeyup="filtrarNoticias()">
+            </div>
+        </div>
+    </header>
+
+    <nav class="teams-bar">
+        <div class="teams-container" id="teamsBar">
+            <!-- Escudos inseridos via JavaScript -->
+        </div>
+    </nav>
+
+    <main>
+        <!-- Seção de Destaques Principais -->
+        <section class="hero-grid">
+            <article class="main-card">
+                <span class="tag">Rodada decisiva</span>
+                <h1>Clássico termina com virada nos acréscimos e muda a liderança do campeonato</h1>
+                <p>Com estádio lotado, equipe visitante marca dois gols após os 45 do segundo tempo e assume a ponta.</p>
+            </article>
+
+            <div class="side-cards">
+                <article class="sub-card">
+                    <img src="https://unsplash.com" alt="Treino">
+                    <div>
+                        <span class="tag">Mercado da bola</span>
+                        <h2>Clube encaminha contratação de meia-atacante destaque da temporada europeia</h2>
+                    </div>
+                </article>
+
+                <article class="sub-card">
+                    <img src="https://unsplash.com" alt="Estádio">
+                    <div>
+                        <span class="tag">Seleção Brasileira</span>
